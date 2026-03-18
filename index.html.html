@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pankaj Ramola — The Pitch</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700;900&family=Space+Mono:wght@400;700&family=Noto+Sans+Devanagari:wght@700;900&family=Noto+Sans+Gurmukhi:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  [data-theme="dark"] {
+    --bg: #050505;
+    --bg2: #0A0A0A;
+    --card: #111111;
+    --border: #2a2a2a;
+    --text: #F0F0F0;
+    --muted: #888;
+    --toggle-bg: #1a1a1a;
+    --scanline: rgba(0,0,0,0.03);
+    --grid-line: rgba(232,0,28,0.07);
+    --pitch-quote: rgba(232,0,28,0.06);
+    --hero-glow1: rgba(232,0,28,0.12);
+    --hero-glow2: rgba(255,184,0,0.07);
+    --nav-bg: rgba(5,5,5,0.88);
+  }
+  [data-theme="light"] {
+    --bg: #f5f2ee;
+    --bg2: #ede9e3;
+    --card: #ffffff;
+    --border: #d4cfc8;
+    --text: #1a1a1a;
+    --muted: #666;
+    --toggle-bg: #e0dbd3;
+    --scanline: rgba(0,0,0,0.008);
+    --grid-line: rgba(232,0,28,0.05);
+    --pitch-quote: rgba(232,0,28,0.04);
+    --hero-glow1: rgba(232,0,28,0.07);
+    --hero-glow2: rgba(255,184,0,0.05);
+    --nav-bg: rgba(245,242,238,0.9);
+  }
+  :root {
+    --red: #E8001C;
+    --gold: #FFB800;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Montserrat', sans-serif;
+    overflow-x: hidden;
+    transition: background 0.4s, color 0.4s;
+  }
+  body::before {
+    content:'';
+    position:fixed; inset:0;
+    background: repeating-linear-gradient(0deg,transparent,transparent 2px,var(--scanline) 2px,var(--scanline) 4px);
+    pointer-events:none; z-index:9999;
+  }
+
+  /* NAV */
+  nav {
+    position:fixed; top:0; left:0; right:0; z-index:1000;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0.9rem 2rem;
+    background: var(--nav-bg);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--border);
+    transition: background 0.4s, border-color 0.4s;
+  }
+  .nav-logo { font-family:'Bebas Neue',sans-serif; font-size:1.3rem; letter-spacing:0.1em; color:var(--text); }
+  .nav-logo span { color:var(--red); }
+  .nav-right { display:flex; align-items:center; gap:1.5rem; }
+  .nav-links { display:flex; gap:1.5rem; list-style:none; }
+  .nav-links a { font-family:'Space Mono',monospace; font-size:0.65rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s; }
+  .nav-links a:hover { color:var(--gold); }
+
+  /* THEME TOGGLE */
+  .toggle-wrap { display:flex; align-items:center; gap:7px; }
+  .theme-label { font-family:'Space Mono',monospace; font-size:0.6rem; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; white-space:nowrap; }
+  .theme-toggle {
+    background:var(--toggle-bg); border:1px solid var(--border);
+    width:46px; height:26px; border-radius:13px;
+    cursor:pointer; position:relative;
+    transition: background 0.3s, border-color 0.3s;
+  }
+  .theme-toggle::after {
+    content:''; position:absolute; top:4px; left:4px;
+    width:16px; height:16px; border-radius:50%;
+    background:var(--gold);
+    transition:transform 0.35s cubic-bezier(.4,0,.2,1), background 0.3s;
+  }
+  [data-theme="light"] .theme-toggle::after { transform:translateX(20px); background:var(--red); }
+  .toggle-icon { font-size:1rem; user-select:none; }
+  @media(max-width:650px){ .nav-links,.theme-label{ display:none; } }
+
+  /* HERO */
+  .hero {
+    min-height:100vh; display:flex; flex-direction:column;
+    justify-content:center; align-items:center;
+    position:relative;
+    background: radial-gradient(ellipse 80% 60% at 50% 40%, var(--hero-glow1) 0%, transparent 70%),
+                radial-gradient(ellipse 60% 40% at 70% 60%, var(--hero-glow2) 0%, transparent 60%),
+                var(--bg);
+    text-align:center; padding:6rem 2rem 3rem; overflow:hidden;
+    transition: background 0.4s;
+  }
+  .hero-grid {
+    position:absolute; inset:0;
+    background-image: linear-gradient(var(--grid-line) 1px,transparent 1px), linear-gradient(90deg,var(--grid-line) 1px,transparent 1px);
+    background-size:60px 60px;
+    mask-image:radial-gradient(ellipse 90% 80% at 50% 50%,black 30%,transparent 100%);
+  }
+  .stage-badge {
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--red); color:white;
+    font-family:'Space Mono',monospace; font-size:0.65rem; font-weight:700;
+    letter-spacing:0.2em; text-transform:uppercase;
+    padding:6px 16px;
+    clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);
+    margin-bottom:2rem;
+    animation:fadeDown 0.6s ease forwards;
+    position:relative; z-index:1;
+  }
+  .live-dot { width:7px; height:7px; background:white; border-radius:50%; animation:blink 1s infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  /* MULTILINGUAL NAME */
+  .hero-name-wrap {
+    position:relative; z-index:1;
+    height:clamp(6rem,20vw,16rem);
+    display:flex; align-items:center; justify-content:center;
+    animation:fadeUp 0.8s 0.2s ease both;
+    width:100%; overflow:hidden;
+  }
+  .name-slide {
+    position:absolute;
+    letter-spacing:0.04em; line-height:1;
+    background:linear-gradient(135deg, var(--text) 0%,#FFB800 50%,#E8001C 100%);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    opacity:0;
+    transform:translateY(40px) scale(0.94);
+    transition:opacity 0.6s ease, transform 0.6s ease;
+    text-align:center; white-space:nowrap;
+    user-select:none;
+  }
+  .name-slide.active { opacity:1; transform:translateY(0) scale(1); }
+  .name-slide.exit   { opacity:0; transform:translateY(-40px) scale(1.06); }
+  .name-en { font-family:'Bebas Neue',sans-serif; font-size:clamp(3.5rem,12vw,9rem); }
+  .name-hi { font-family:'Noto Sans Devanagari',sans-serif; font-weight:900; font-size:clamp(2.6rem,8.5vw,7.5rem); }
+  .name-pa { font-family:'Noto Sans Gurmukhi',sans-serif; font-weight:900; font-size:clamp(2.6rem,8.5vw,7rem); }
+
+  .lang-indicator {
+    position:relative; z-index:1;
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    margin-top:0.6rem;
+    animation:fadeUp 0.8s 0.3s ease both;
+  }
+  .lang-dot {
+    width:8px; height:8px; border-radius:50%;
+    background:var(--border);
+    transition:background 0.3s, transform 0.3s;
+  }
+  .lang-dot.on { background:var(--gold); transform:scale(1.5); }
+  .lang-label {
+    font-family:'Space Mono',monospace; font-size:0.6rem;
+    color:var(--muted); letter-spacing:0.15em; text-transform:uppercase;
+    margin-top:0.3rem;
+    animation:fadeUp 0.8s 0.35s ease both;
+    position:relative; z-index:1;
+    min-height:1.1em;
+    transition:color 0.3s;
+  }
+
+  .hero-title {
+    font-family:'Space Mono',monospace; font-size:clamp(0.7rem,2vw,1rem);
+    letter-spacing:0.3em; text-transform:uppercase; color:var(--gold);
+    margin-top:1.2rem; animation:fadeUp 0.8s 0.45s ease both;
+    position:relative; z-index:1;
+  }
+  .hero-tagline {
+    font-size:clamp(0.85rem,2.5vw,1.1rem); color:var(--muted);
+    max-width:480px; margin:1.4rem auto 0; line-height:1.75;
+    animation:fadeUp 0.8s 0.6s ease both;
+    position:relative; z-index:1;
+  }
+  .valuation-strip {
+    display:flex; gap:2rem; flex-wrap:wrap; justify-content:center;
+    margin-top:2.5rem; animation:fadeUp 0.8s 0.75s ease both;
+    position:relative; z-index:1;
+  }
+  .val-item { text-align:center; position:relative; }
+  .val-item::after { content:''; position:absolute; right:-1rem; top:20%; height:60%; width:1px; background:var(--border); }
+  .val-item:last-child::after { display:none; }
+  .val-num { font-family:'Bebas Neue',sans-serif; font-size:2.2rem; color:var(--gold); line-height:1; }
+  .val-label { font-size:0.6rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--muted); margin-top:4px; }
+
+  .hero-cta {
+    display:flex; gap:1rem; flex-wrap:wrap; justify-content:center;
+    margin-top:2.5rem; animation:fadeUp 0.8s 0.9s ease both;
+    position:relative; z-index:1;
+  }
+  .scroll-hint {
+    position:absolute; bottom:2rem; left:50%; transform:translateX(-50%);
+    display:flex; flex-direction:column; align-items:center; gap:6px;
+    color:var(--muted); font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase;
+    animation:bounce 2s infinite; z-index:1;
+  }
+  @keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(8px)} }
+
+  /* TICKER */
+  .ticker-wrap { background:var(--red); overflow:hidden; padding:10px 0; }
+  .ticker-track { display:flex; white-space:nowrap; animation:ticker 28s linear infinite; }
+  .ticker-item { font-family:'Space Mono',monospace; font-size:0.75rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:white; padding:0 2rem; }
+  .ticker-item::after { content:'◆'; margin-left:2rem; opacity:0.5; }
+  @keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+  /* SECTIONS */
+  section { max-width:1100px; margin:0 auto; padding:5rem 2rem; }
+  .section-label { display:inline-flex; align-items:center; gap:10px; font-family:'Space Mono',monospace; font-size:0.65rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--red); margin-bottom:1rem; }
+  .section-label::before { content:''; width:30px; height:2px; background:var(--red); }
+  .section-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(2.5rem,6vw,4.5rem); letter-spacing:0.04em; line-height:1; margin-bottom:3rem; }
+
+  /* PITCH */
+  .pitch-box { background:var(--card); border:1px solid var(--border); border-left:4px solid var(--red); padding:2.5rem; position:relative; overflow:hidden; transition:background 0.4s,border-color 0.4s; }
+  .pitch-box::before { content:'"'; font-family:'Bebas Neue',sans-serif; font-size:10rem; color:var(--pitch-quote); position:absolute; top:-1rem; left:1rem; line-height:1; }
+  .pitch-text { font-size:1.05rem; line-height:1.9; color:var(--muted); position:relative; z-index:1; }
+  .pitch-text strong { color:var(--gold); }
+
+  /* PROJECTS */
+  .projects-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:1.5rem; }
+  .project-card { background:var(--card); border:1px solid var(--border); padding:2rem; position:relative; overflow:hidden; transition:border-color 0.3s,transform 0.3s,background 0.4s; }
+  .project-card::before { content:''; position:absolute; inset:0; background:radial-gradient(circle at 50% 0%,rgba(255,184,0,0.08),transparent 70%); opacity:0; transition:opacity 0.3s; }
+  .project-card:hover { border-color:var(--gold); transform:translateY(-4px); }
+  .project-card:hover::before { opacity:1; }
+  .project-tag { font-family:'Space Mono',monospace; font-size:0.6rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--red); background:rgba(232,0,28,0.1); padding:3px 10px; display:inline-block; margin-bottom:1rem; }
+  .project-name { font-family:'Bebas Neue',sans-serif; font-size:1.8rem; letter-spacing:0.04em; margin-bottom:0.75rem; }
+  .project-desc { font-size:0.85rem; line-height:1.7; color:var(--muted); }
+  .project-tech { display:flex; flex-wrap:wrap; gap:6px; margin-top:1.2rem; }
+  .tech-pill { font-family:'Space Mono',monospace; font-size:0.6rem; color:var(--gold); border:1px solid rgba(255,184,0,0.3); padding:3px 8px; }
+  .project-number { position:absolute; top:1.5rem; right:1.5rem; font-family:'Bebas Neue',sans-serif; font-size:3.5rem; color:rgba(128,128,128,0.06); line-height:1; }
+
+  /* SKILLS */
+  .skills-container { display:grid; grid-template-columns:1fr 1fr; gap:2rem; }
+  @media(max-width:600px){ .skills-container{ grid-template-columns:1fr; } }
+  .skill-group { background:var(--card); border:1px solid var(--border); padding:1.8rem; transition:background 0.4s,border-color 0.4s; }
+  .skill-group-title { font-family:'Bebas Neue',sans-serif; font-size:1.3rem; letter-spacing:0.1em; color:var(--gold); margin-bottom:1.2rem; display:flex; align-items:center; gap:8px; }
+  .skill-group-title::after { content:''; flex:1; height:1px; background:var(--border); }
+  .skill-tags { display:flex; flex-wrap:wrap; gap:8px; }
+  .skill-tag { font-family:'Space Mono',monospace; font-size:0.7rem; background:rgba(128,128,128,0.06); border:1px solid var(--border); padding:5px 12px; color:var(--text); transition:all 0.2s; cursor:default; }
+  .skill-tag:hover { background:rgba(232,0,28,0.15); border-color:var(--red); }
+
+  /* TIMELINE */
+  .timeline { position:relative; padding-left:2rem; }
+  .timeline::before { content:''; position:absolute; left:0; top:0; bottom:0; width:2px; background:linear-gradient(to bottom,var(--red),var(--gold),transparent); }
+  .timeline-item { position:relative; margin-bottom:2.5rem; padding-left:1.5rem; }
+  .timeline-item::before { content:''; position:absolute; left:-2.35rem; top:6px; width:12px; height:12px; background:var(--gold); clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%); }
+  .timeline-year { font-family:'Space Mono',monospace; font-size:0.65rem; color:var(--red); letter-spacing:0.15em; margin-bottom:4px; }
+  .timeline-role { font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:0.06em; margin-bottom:4px; }
+  .timeline-org { font-size:0.8rem; color:var(--gold); margin-bottom:0.5rem; }
+  .timeline-desc { font-size:0.82rem; color:var(--muted); line-height:1.7; }
+
+  /* EDUCATION */
+  .edu-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1.5rem; }
+  .edu-card { background:var(--card); border:1px solid var(--border); padding:1.8rem; text-align:center; transition:border-color 0.3s,background 0.4s; }
+  .edu-card:hover { border-color:var(--gold); }
+  .edu-score { font-family:'Bebas Neue',sans-serif; font-size:3rem; color:var(--gold); line-height:1; }
+  .edu-label { font-size:0.75rem; color:var(--muted); margin-top:4px; }
+  .edu-degree { font-family:'Bebas Neue',sans-serif; font-size:1.1rem; margin-top:1rem; }
+  .edu-institute { font-size:0.7rem; color:var(--muted); margin-top:4px; }
+  .edu-year { font-family:'Space Mono',monospace; font-size:0.6rem; color:var(--red); margin-top:8px; }
+
+  /* EXTRAS */
+  .extras-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1rem; }
+  .extra-item { display:flex; align-items:flex-start; gap:1rem; padding:1.2rem 1.5rem; background:var(--card); border:1px solid var(--border); transition:border-color 0.3s,background 0.4s; }
+  .extra-item:hover { border-color:var(--red); }
+  .extra-icon { font-size:1.5rem; flex-shrink:0; }
+  .extra-text { font-size:0.82rem; color:var(--muted); line-height:1.5; }
+
+  /* CTA */
+  .cta-section { background:linear-gradient(135deg,rgba(232,0,28,0.12),rgba(255,184,0,0.08)); border-top:1px solid rgba(232,0,28,0.25); border-bottom:1px solid rgba(232,0,28,0.25); padding:5rem 2rem; text-align:center; position:relative; overflow:hidden; }
+  .cta-section::before { content:"I'M IN"; font-family:'Bebas Neue',sans-serif; font-size:15rem; color:rgba(255,184,0,0.03); position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); white-space:nowrap; pointer-events:none; }
+  .cta-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(2.5rem,7vw,5rem); letter-spacing:0.04em; line-height:1; position:relative; z-index:1; }
+  .cta-sub { color:var(--muted); font-size:0.9rem; margin:1rem 0 2rem; position:relative; z-index:1; }
+  .cta-buttons { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; position:relative; z-index:1; }
+
+  /* BUTTONS */
+  .btn { font-family:'Space Mono',monospace; font-size:0.75rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; text-decoration:none; padding:14px 28px; cursor:pointer; transition:all 0.25s; display:inline-flex; align-items:center; gap:8px; border:none; }
+  .btn-primary { background:var(--red); color:white; clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%); }
+  .btn-primary:hover { background:#c0001a; transform:translateY(-2px); }
+  .btn-outline { background:transparent; color:var(--gold); border:2px solid var(--gold); clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%); }
+  .btn-outline:hover { background:rgba(255,184,0,0.1); transform:translateY(-2px); }
+  .btn-resume { background:var(--gold); color:#111; clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%); font-weight:900; }
+  .btn-resume:hover { background:#e6a600; transform:translateY(-2px); }
+
+  hr.divider { border:none; border-top:1px solid var(--border); }
+  footer { background:var(--bg); border-top:1px solid var(--border); padding:2rem; text-align:center; font-family:'Space Mono',monospace; font-size:0.65rem; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; transition:background 0.4s; }
+
+  .reveal { opacity:0; transform:translateY(28px); transition:opacity 0.7s ease,transform 0.7s ease; }
+  .reveal.visible { opacity:1; transform:none; }
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes fadeDown { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:translateY(0)} }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Pankaj<span>.</span></div>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="#pitch">Pitch</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="toggle-wrap">
+      <span class="toggle-icon" id="toggle-icon">☀️</span>
+      <div class="theme-toggle" id="themeToggle" role="button" tabindex="0" title="Toggle theme"></div>
+      <span class="theme-label" id="theme-label">Dark</span>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="stage-badge"><span class="live-dot"></span>On The Tank Floor</div>
+
+  <div class="hero-name-wrap">
+    <span class="name-slide name-en active" id="name-0">PANKAJ RAMOLA</span>
+    <span class="name-slide name-hi"         id="name-1">पंकज रमोला</span>
+    <span class="name-slide name-pa"         id="name-2">ਪੰਕਜ ਰਮੋਲਾ</span>
+  </div>
+
+  <div class="lang-indicator">
+    <div class="lang-dot on"  id="dot-0"></div>
+    <div class="lang-dot"     id="dot-1"></div>
+    <div class="lang-dot"     id="dot-2"></div>
+  </div>
+  <div class="lang-label" id="lang-label">English</div>
+
+  <p class="hero-title">Full Stack Developer &amp; ML Enthusiast</p>
+  <p class="hero-tagline">Building secure, scalable, and user-centric web experiences — one pitch at a time.</p>
+
+  <div class="valuation-strip">
+    <div class="val-item"><div class="val-num">3+</div><div class="val-label">Live Projects</div></div>
+    <div class="val-item"><div class="val-num">6mo</div><div class="val-label">Industry Training</div></div>
+    <div class="val-item"><div class="val-num">OWASP</div><div class="val-label">Security Focus</div></div>
+    <div class="val-item"><div class="val-num">2025</div><div class="val-label">Graduating</div></div>
+  </div>
+
+  <div class="hero-cta">
+    <button class="btn btn-resume" id="resumeBtn">⬇ Download Resume</button>
+    <a class="btn btn-outline" href="#pitch">View Pitch ↓</a>
+  </div>
+
+  <div class="scroll-hint"><span>↓</span>scroll</div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-track">
+    <span class="ticker-item">React.js</span><span class="ticker-item">Node.js</span><span class="ticker-item">MongoDB</span>
+    <span class="ticker-item">Machine Learning</span><span class="ticker-item">Redux</span><span class="ticker-item">AWS</span>
+    <span class="ticker-item">Web Security</span><span class="ticker-item">Python</span><span class="ticker-item">Streamlit</span>
+    <span class="ticker-item">JavaScript</span><span class="ticker-item">OWASP Top 10</span><span class="ticker-item">Git</span>
+    <span class="ticker-item">React.js</span><span class="ticker-item">Node.js</span><span class="ticker-item">MongoDB</span>
+    <span class="ticker-item">Machine Learning</span><span class="ticker-item">Redux</span><span class="ticker-item">AWS</span>
+    <span class="ticker-item">Web Security</span><span class="ticker-item">Python</span><span class="ticker-item">Streamlit</span>
+    <span class="ticker-item">JavaScript</span><span class="ticker-item">OWASP Top 10</span><span class="ticker-item">Git</span>
+  </div>
+</div>
+
+<!-- PITCH -->
+<section id="pitch">
+  <div class="section-label">Opening Pitch</div>
+  <h2 class="section-title">The Founder's<br>Statement</h2>
+  <div class="pitch-box reveal">
+    <p class="pitch-text">
+      I'm <strong>Pankaj Ramola</strong>, a Computer Science student at Guru Nanak Dev Engineering College, Ludhiana — and I'm not here just for a job.
+      I'm here to <strong>build things that matter</strong>.<br><br>
+      From crafting real-time chat analyzers with Streamlit, to architecting full e-commerce platforms with React and Redux,
+      to exploring the frontiers of Machine Learning — I bring a rare blend of <strong>frontend finesse, backend muscle, and security awareness</strong>.<br><br>
+      I've trained in ML at NELIT, shipped live web applications, and even held a microphone as an <strong>RJ at 90.8 FM</strong>.
+      I communicate as well as I code.<br><br>
+      The deal I'm offering? Give me the right stage, and I will deliver results that exceed every expectation.
+      <strong>I'm ready to close.</strong>
+    </p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-label">Product Demos</div>
+  <h2 class="section-title">The<br>Portfolio</h2>
+  <div class="projects-grid">
+    <div class="project-card reveal">
+      <div class="project-number">01</div>
+      <div class="project-tag">Data &amp; Analytics</div>
+      <div class="project-name">WhatsApp Chat Analyzer</div>
+      <p class="project-desc">A real-time chat analysis tool built with Streamlit featuring interactive visualizations that surface patterns, sentiments, and engagement metrics from conversations.</p>
+      <div class="project-tech"><span class="tech-pill">Python</span><span class="tech-pill">Streamlit</span><span class="tech-pill">Matplotlib</span><span class="tech-pill">NLP</span></div>
+    </div>
+    <div class="project-card reveal">
+      <div class="project-number">02</div>
+      <div class="project-tag">E-Commerce</div>
+      <div class="project-name">Muscle Shark</div>
+      <p class="project-desc">A full-featured e-commerce platform with user authentication, cart functionality, Redux state management, and MongoDB-powered data storage.</p>
+      <div class="project-tech"><span class="tech-pill">React.js</span><span class="tech-pill">Redux</span><span class="tech-pill">MongoDB</span><span class="tech-pill">Node.js</span></div>
+    </div>
+    <div class="project-card reveal">
+      <div class="project-number">03</div>
+      <div class="project-tag">EdTech &amp; Community</div>
+      <div class="project-name">Project Clay</div>
+      <p class="project-desc">A mentorship bridge connecting +2 secondary students with college seniors for guidance, powered by real-time video via Agora Web SDK.</p>
+      <div class="project-tech"><span class="tech-pill">Agora SDK</span><span class="tech-pill">React.js</span><span class="tech-pill">JavaScript</span><span class="tech-pill">HTML/CSS</span></div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-label">Due Diligence</div>
+  <h2 class="section-title">The<br>Skill Stack</h2>
+  <div class="skills-container">
+    <div class="skill-group reveal">
+      <div class="skill-group-title">💻 Technical</div>
+      <div class="skill-tags">
+        <span class="skill-tag">C</span><span class="skill-tag">JavaScript</span><span class="skill-tag">Java</span>
+        <span class="skill-tag">React.js</span><span class="skill-tag">Redux</span><span class="skill-tag">MongoDB</span>
+        <span class="skill-tag">Python</span><span class="skill-tag">Streamlit</span>
+        <span class="skill-tag">OWASP Top 10</span><span class="skill-tag">Web App Security</span>
+      </div>
+    </div>
+    <div class="skill-group reveal">
+      <div class="skill-group-title">☁️ Cloud &amp; Tools</div>
+      <div class="skill-tags">
+        <span class="skill-tag">AWS</span><span class="skill-tag">Git</span><span class="skill-tag">VS Code</span>
+        <span class="skill-tag">Asana</span><span class="skill-tag">NumPy</span><span class="skill-tag">Pandas</span>
+        <span class="skill-tag">Scikit-Learn</span><span class="skill-tag">Kaggle</span>
+      </div>
+    </div>
+    <div class="skill-group reveal">
+      <div class="skill-group-title">🧠 ML &amp; Data</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Machine Learning</span><span class="skill-tag">Model Evaluation</span>
+        <span class="skill-tag">Real-World Datasets</span><span class="skill-tag">Data Visualization</span><span class="skill-tag">Matplotlib</span>
+      </div>
+    </div>
+    <div class="skill-group reveal">
+      <div class="skill-group-title">🤝 Soft Skills</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Team Work</span><span class="skill-tag">Communication</span><span class="skill-tag">Time Management</span>
+        <span class="skill-tag">Video Editing</span><span class="skill-tag">Graphic Designing</span><span class="skill-tag">Public Speaking</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-label">Track Record</div>
+  <h2 class="section-title">Work &amp;<br>Training</h2>
+  <div class="timeline">
+    <div class="timeline-item reveal">
+      <div class="timeline-year">2021 – 2025</div>
+      <div class="timeline-role">B.Tech Computer Science</div>
+      <div class="timeline-org">Guru Nanak Dev Engineering College, Ludhiana</div>
+      <div class="timeline-desc">Building a strong foundation in software engineering, web development, and secure systems design. Aggregate: 74%.</div>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="timeline-year">Training · 1 Month</div>
+      <div class="timeline-role">Machine Learning Training</div>
+      <div class="timeline-org">NELIT, Ropar, Punjab</div>
+      <div class="timeline-desc">Foundational program covering Python ML libraries (NumPy, Pandas, Scikit-Learn, Matplotlib) and evaluation of models on real-world Kaggle datasets.</div>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="timeline-year">Training · 6 Months</div>
+      <div class="timeline-role">Web Development Training</div>
+      <div class="timeline-org">Ansh Info Tech</div>
+      <div class="timeline-desc">Developed web applications using JSON APIs and delivered a capstone project showcasing full-stack development skills.</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- EDUCATION -->
+<section>
+  <div class="section-label">Academic Metrics</div>
+  <h2 class="section-title">Education</h2>
+  <div class="edu-grid">
+    <div class="edu-card reveal">
+      <div class="edu-score">74%</div><div class="edu-label">Aggregate</div>
+      <div class="edu-degree">B.Tech — CSE</div>
+      <div class="edu-institute">GNDEC, Ludhiana</div>
+      <div class="edu-year">2021 → 2025</div>
+    </div>
+    <div class="edu-card reveal">
+      <div class="edu-score">75.6%</div><div class="edu-label">Percentage</div>
+      <div class="edu-degree">12th Standard</div>
+      <div class="edu-institute">Non-Medical Stream</div>
+      <div class="edu-year">2021</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- EXTRAS -->
+<section>
+  <div class="section-label">Beyond the Balance Sheet</div>
+  <h2 class="section-title">Extra-<br>Curriculars</h2>
+  <div class="extras-grid">
+    <div class="extra-item reveal">
+      <div class="extra-icon">🏆</div>
+      <div class="extra-text"><strong style="color:var(--gold)">Hackathon Participant</strong> — Sharpened technical skills and teamwork under pressure in competitive hackathon environments.</div>
+    </div>
+    <div class="extra-item reveal">
+      <div class="extra-icon">🎙️</div>
+      <div class="extra-text"><strong style="color:var(--gold)">RJ at 90.8 FM</strong> — Community Radio Jockey. Proof that this developer can communicate as well as he can code.</div>
+    </div>
+    <div class="extra-item reveal">
+      <div class="extra-icon">🎨</div>
+      <div class="extra-text"><strong style="color:var(--gold)">GNDEC CML Sports Page</strong> — Created posters and edited reels for the institute's official sports Instagram page.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT / CTA -->
+<div class="cta-section" id="contact">
+  <h2 class="cta-title">Ready to<br>Make a Deal?</h2>
+  <p class="cta-sub">Let's build something extraordinary together. The sharks are watching.</p>
+  <div class="cta-buttons">
+    <button class="btn btn-resume" id="resumeBtn2">⬇ Download Resume</button>
+    <a class="btn btn-primary" href="mailto:pankajramola30@gmail.com">📩 Email Me</a>
+    <a class="btn btn-outline" href="https://www.linkedin.com/in/pankaj30" target="_blank">💼 LinkedIn</a>
+    <a class="btn btn-outline" href="https://github.com/PANKU517" target="_blank">💻 GitHub</a>
+  </div>
+  <p style="margin-top:2rem;font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--muted);letter-spacing:0.1em;">+91 7986740135 &nbsp;|&nbsp; Ludhiana, Punjab</p>
+</div>
+
+<footer>© 2025 Pankaj Ramola &nbsp;·&nbsp; Built with Code &amp; Conviction &nbsp;·&nbsp; Shark Tank Inspired</footer>
+
+<script>
+/* ── 1. THEME TOGGLE ── */
+const html       = document.documentElement;
+const toggleBtn  = document.getElementById('themeToggle');
+const themeLabel = document.getElementById('theme-label');
+const toggleIcon = document.getElementById('toggle-icon');
+
+function applyTheme(t) {
+  html.setAttribute('data-theme', t);
+  themeLabel.textContent = t === 'dark' ? 'Dark' : 'Light';
+  toggleIcon.textContent  = t === 'dark' ? '☀️' : '🌙';
+  localStorage.setItem('pr_theme', t);
+}
+toggleBtn.addEventListener('click', () => {
+  applyTheme(html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+});
+toggleBtn.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' ') toggleBtn.click(); });
+const saved = localStorage.getItem('pr_theme');
+if (saved) applyTheme(saved);
+
+/* ── 2. MULTILINGUAL NAME ROTATOR ── */
+const names = ['name-0','name-1','name-2'].map(id => document.getElementById(id));
+const dots  = ['dot-0','dot-1','dot-2'].map(id => document.getElementById(id));
+const langs = ['English','Hindi — हिन्दी','Punjabi — ਪੰਜਾਬੀ'];
+const langLabel = document.getElementById('lang-label');
+let cur = 0;
+
+function rotateName() {
+  const prev = cur;
+  cur = (cur + 1) % names.length;
+
+  names[prev].classList.remove('active');
+  names[prev].classList.add('exit');
+  dots[prev].classList.remove('on');
+
+  setTimeout(() => {
+    names[prev].classList.remove('exit');
+    names[cur].classList.add('active');
+    dots[cur].classList.add('on');
+    langLabel.textContent = langs[cur];
+  }, 420);
+}
+setInterval(rotateName, 3000);
+
+/* ── 3. RESUME DOWNLOAD ── */
+const resumeText = `PANKAJ RAMOLA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Full Stack Developer & ML Enthusiast
+Email  : pankajramola30@gmail.com
+Phone  : +91 7986740135
+Location: Ludhiana, Punjab
+LinkedIn: linkedin.com/in/pankaj30
+GitHub  : github.com/PANKU517
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OBJECTIVE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Seeking a challenging role in a growth-oriented organization where I can apply
+secure development practices and enhance my technical and interpersonal skills
+for mutual growth.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EDUCATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+B.Tech (CSE) — Guru Nanak Dev Engineering College, Ludhiana
+2021–2025 | Aggregate: 74%
+
+12th Standard (Non-Medical) — 75.6% | 2021
+10th Standard — 2019
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PROJECTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WhatsApp Chat Analyzer
+  Real-time chat analysis with interactive visualizations.
+  Stack: Python, Streamlit, Matplotlib, NLP
+
+Muscle Shark (E-Commerce)
+  Full e-commerce platform with user auth, cart, and Redux.
+  Stack: React.js, Redux, MongoDB, Node.js
+
+Project Clay (EdTech)
+  Connects +2 students with college seniors for guidance.
+  Stack: Agora WebSDK, React.js, JavaScript, HTML/CSS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SKILLS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Technical  : C, JavaScript, React.js, Java, OWASP Top 10, Web App Security
+ML / Data  : Python, NumPy, Pandas, Scikit-Learn, Matplotlib, Streamlit
+Cloud      : AWS
+Tools      : Git, VS Code, Asana
+Soft Skills: Teamwork, Communication, Time Management,
+             Video Editing, Graphic Designing, Public Speaking
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TRAINING & WORK EXPERIENCE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Machine Learning Training — NELIT, Ropar, Punjab (1 Month)
+Web Development Training  — Ansh Info Tech (6 Months)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EXTRA-CURRICULAR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Hackathon Participant
+• RJ at 90.8 FM Community Radio
+• Poster & Reel Creator — GNDEC CML Sports Instagram Page
+`;
+
+function downloadResume() {
+  const blob = new Blob([resumeText], { type: 'text/plain;charset=utf-8' });
+  const url  = URL.createObjectURL(blob);
+  const a    = Object.assign(document.createElement('a'), { href: url, download: 'Pankaj_Ramola_Resume.txt' });
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+document.getElementById('resumeBtn').addEventListener('click', downloadResume);
+document.getElementById('resumeBtn2').addEventListener('click', downloadResume);
+
+/* ── 4. SCROLL REVEAL ── */
+const revealEls = document.querySelectorAll('.reveal');
+const ro = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      ro.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+revealEls.forEach(el => ro.observe(el));
+</script>
+</body>
+</html>
